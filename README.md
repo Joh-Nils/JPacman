@@ -1,1 +1,1 @@
-Assets: PacMan Asset - FREE by VladPenn
+Assets: PacMan Asset - https://vladpenn.itch.io/pacman
