@@ -9,10 +9,12 @@ import java.awt.image.BufferedImage;
 import static util.getURL.getURL;
 
 public class Coin extends Entity {
+    private GamePanel gp;
     private boolean collected = false;
     private final boolean big;
 
-    public Coin(boolean big, int x, int y) {
+    public Coin(GamePanel gp, boolean big, int x, int y) {
+        this.gp = gp;
         this.big = big;
         this.x = x;
         this.y = y;
@@ -34,6 +36,18 @@ public class Coin extends Entity {
 
         walkingAnimationTimer += (float) GamePanel.animationSpeeds * dt;
         if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
+
+        //Player collection
+        hitBox.translate( (int) x / GamePanel.scale, (int) y / GamePanel.scale);
+        gp.player.hitBox.translate( (int) gp.player.x / GamePanel.scale, (int) gp.player.y / GamePanel.scale);
+
+        if (gp.player.hitBox.intersects(hitBox)) {
+            use();
+        }
+
+        //CleanUp
+        hitBox.translate( (int) -x / GamePanel.scale, (int) -y / GamePanel.scale);
+        gp.player.hitBox.translate( (int) -gp.player.x / GamePanel.scale, (int) -gp.player.y / GamePanel.scale);
     }
 
     @Override
@@ -49,8 +63,8 @@ public class Coin extends Entity {
         }
     }
 
-    public int use() {
+    public void use() {
         collected = true;
-        return big ? 0 : 1;
+        gp.player.Score += big ? 0 : 1;
     }
 }

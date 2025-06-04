@@ -33,7 +33,7 @@ public class SpriteSheet {
             i++;
             x++;
 
-            if (x * SpriteWidth > imageWidth) {
+            if (x * SpriteWidth >= imageWidth) {
                 x = 0;
                 y++;
             }

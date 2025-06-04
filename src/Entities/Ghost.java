@@ -33,16 +33,16 @@ public class Ghost extends Entity{
         if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
 
         if (!vulnerable) {
-            hitBox.translate((int) x, (int) y);
-            gp.player.hitBox.translate((int) gp.player.x, (int) gp.player.y);
+            hitBox.translate( (int) x / GamePanel.scale, (int) y / GamePanel.scale);
+            gp.player.hitBox.translate( (int) gp.player.x / GamePanel.scale, (int) gp.player.y / GamePanel.scale);
+
             if (hitBox.intersects(gp.player.hitBox)) {
                 //TODO: Hit
-
             }
 
             //CleanUp
-            hitBox.translate((int) -x, (int) -y);
-            gp.player.hitBox.translate((int) -gp.player.x, (int) -gp.player.y);
+            hitBox.translate( (int) -x / GamePanel.scale, (int) -y / GamePanel.scale);
+            gp.player.hitBox.translate( (int) -gp.player.x / GamePanel.scale, (int) -gp.player.y / GamePanel.scale);
         }
     }
 

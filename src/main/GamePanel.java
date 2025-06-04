@@ -7,6 +7,7 @@ import Handlers.KeyHandler;
 import Handlers.WindowHandler;
 import Scenes.PlayingScene;
 import Scenes.Scene;
+import Tiles.TileManager;
 import util.SpriteSheet;
 
 import javax.swing.*;
@@ -34,11 +35,13 @@ public class GamePanel extends JPanel implements Runnable {
     public static int FPS = 60;
 
     //Actors
-    public Pacman player = new Pacman();
+    public Pacman player = new Pacman(this);
     public Ghost[] ghosts = new Ghost[4];
     public Coin[] coins = new Coin[200]; //More than enough
 
     public Scene currentScene = new PlayingScene(this);
+
+    public TileManager tileManager = new TileManager();
 
     //FPS calc
     long firstFrame;

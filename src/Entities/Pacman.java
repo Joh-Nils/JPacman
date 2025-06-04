@@ -12,7 +12,7 @@ import static util.getURL.getURL;
 public class Pacman extends Entity {
 
     //Constants
-    public static final int speed = 150;
+    public final int speed;
 
 
     public int Score = 0;
@@ -24,14 +24,18 @@ public class Pacman extends Entity {
     public boolean downPressed = false;
 
     public char direction = 'R'; //U - up; L - Left; D - Down; R - Right
+    public char directionBuffer = 'R'; //U - up; L - Left; D - Down; R - Right
+    public double bufferTimer = 0.2;
 
 
-    public Pacman() {
+    public Pacman(GamePanel gp) {
         spriteSheet = AssetPool.getSpriteSheet(getURL("/images/PacMan.png"),16,16);
         spriteSheetLeft = ImageTransform.flipSpriteSheet(spriteSheet);
         spriteSheetUp = ImageTransform.rotateSpriteSheet(spriteSheet,-90);
         spriteSheetDown = ImageTransform.rotateSpriteSheet(spriteSheet,90);
         hitBox = new Rectangle(0,0,16,16);
+
+        speed = 40 * GamePanel.scale;
 
         x = 100;
         y = 100;
@@ -46,10 +50,26 @@ public class Pacman extends Entity {
     }
 
     private void move(float dt) {
-        if (upPressed) direction = 'U';
-        else if (leftPressed) direction = 'L';
-        else if (downPressed) direction = 'D';
-        else if (rightPressed) direction = 'R';
+        if (upPressed) directionBuffer = 'U';
+        else if (leftPressed) directionBuffer = 'L';
+        else if (downPressed) directionBuffer = 'D';
+        else if (rightPressed) directionBuffer = 'R';
+
+        if (directionBuffer != direction) {
+            bufferTimer -= 1 * dt;
+
+            if (checkValidInput()) {
+                bufferTimer = 0.2;
+
+                direction = directionBuffer;
+            }
+
+            else if (bufferTimer <= 0.0) {
+                bufferTimer = 0.2;
+
+                directionBuffer = direction;
+            }
+        }
 
         //TODO Collision Handling
         switch (direction) {
@@ -70,6 +90,9 @@ public class Pacman extends Entity {
                 assert false : "Unknown Direction Key: '" + direction + "'";
             }
         }
+    }
+    private boolean checkValidInput() {
+        return true; //TODO
     }
 
     @Override
