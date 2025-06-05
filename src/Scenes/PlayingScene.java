@@ -10,6 +10,8 @@ import java.awt.*;
 public class PlayingScene implements Scene{
     private GamePanel gp;
 
+    public boolean paused = false;
+
     public PlayingScene(GamePanel gp) {
         this.gp = gp;
     }
@@ -29,6 +31,13 @@ public class PlayingScene implements Scene{
 
         gp.coins[0] = new Coin(gp,true, 100, 200);
         gp.coins[1] = new Coin(gp,false, 164, 200);
+    }
+
+    @Override
+    public void reset() {
+        paused = true;
+        gp.player.started = false;
+        gp.player.directionBuffer = ' ';
     }
 
     @Override

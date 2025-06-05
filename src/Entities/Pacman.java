@@ -1,5 +1,6 @@
 package Entities;
 
+import Scenes.DeathScene;
 import main.GamePanel;
 import util.AssetPool;
 import util.ImageTransform;
@@ -10,12 +11,13 @@ import java.awt.*;
 import static util.getURL.getURL;
 
 public class Pacman extends Entity {
+    private GamePanel gp;
 
     //Constants
-    public final int speed;
-
+    public final double speed;
 
     public int Score = 0;
+    public int Lives = 3;
 
     //Overlapping Memory with KeyHandler
     public boolean upPressed = false;
@@ -24,11 +26,14 @@ public class Pacman extends Entity {
     public boolean downPressed = false;
 
     public char direction = 'R'; //U - up; L - Left; D - Down; R - Right
-    public char directionBuffer = 'R'; //U - up; L - Left; D - Down; R - Right
+    public char directionBuffer = ' '; //U - up; L - Left; D - Down; R - Right
     public double bufferTimer = 0.2;
 
+    public boolean started;
 
     public Pacman(GamePanel gp) {
+        this.gp = gp;
+
         spriteSheet = AssetPool.getSpriteSheet(getURL("/images/PacMan.png"),16,16);
         spriteSheetLeft = ImageTransform.flipSpriteSheet(spriteSheet);
         spriteSheetUp = ImageTransform.rotateSpriteSheet(spriteSheet,-90);
@@ -37,16 +42,42 @@ public class Pacman extends Entity {
 
         speed = 40 * GamePanel.scale;
 
-        x = 100;
-        y = 100;
+        x = 500;
+        y = 500;
     }
 
     @Override
     public void update(float dt) {
+        //Started?
+        if (!started) {
+            if (upPressed) directionBuffer = 'U';
+            else if (leftPressed) directionBuffer = 'L';
+            else if (downPressed) directionBuffer = 'D';
+            else if (rightPressed) directionBuffer = 'R';
+
+            if (checkValidInput()) {
+                direction = directionBuffer;
+
+                started = true;
+            }
+
+            return;
+        }
+
+        //Check Lives
+        if (Lives <= 0) {
+            if (!gp.currentScene.getClass().equals(DeathScene.class)) {
+                gp.changeScene(new DeathScene(gp));
+            }
+
+            return; //Stop Updating while dead
+        }
+
         walkingAnimationTimer += (float) GamePanel.animationSpeeds * dt;
         if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
 
         move(dt);
+
     }
 
     private void move(float dt) {
@@ -74,16 +105,16 @@ public class Pacman extends Entity {
         //TODO Collision Handling
         switch (direction) {
             case 'U' -> {
-                y -= (double) speed * dt;
+                y -= speed * dt;
             }
             case 'L' -> {
-                x -= (double) speed * dt;
+                x -=  speed * dt;
             }
             case 'D' -> {
-                y += (double) speed * dt;
+                y += speed * dt;
             }
             case 'R' -> {
-                x += (double) speed * dt;
+                x += speed * dt;
             }
 
             default -> {
@@ -92,6 +123,8 @@ public class Pacman extends Entity {
         }
     }
     private boolean checkValidInput() {
+        if (directionBuffer == ' ') return false;
+
         return true; //TODO
     }
 
@@ -117,12 +150,12 @@ public class Pacman extends Entity {
                 assert false : "Unknown Direction Key: '" + direction + "'";
             }
         }
-        g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer),(int) x,(int) y,hitBox.width * GamePanel.scale, hitBox.height * GamePanel.scale, null);
+        g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer),(int) x,(int) y, (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
 
 
         if (GamePanel.debug) {
             g.setColor(Color.WHITE);
-            g.drawRect((int) (hitBox.x * GamePanel.scale + x), (int) (hitBox.y * GamePanel.scale + y), hitBox.width * GamePanel.scale, hitBox.height * GamePanel.scale);
+            g.drawRect((int) (hitBox.x * GamePanel.scale + x), (int) (hitBox.y * GamePanel.scale + y), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
         }
     }
 }

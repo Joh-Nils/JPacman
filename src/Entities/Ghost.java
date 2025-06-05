@@ -33,26 +33,28 @@ public class Ghost extends Entity{
         if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
 
         if (!vulnerable) {
-            hitBox.translate( (int) x / GamePanel.scale, (int) y / GamePanel.scale);
-            gp.player.hitBox.translate( (int) gp.player.x / GamePanel.scale, (int) gp.player.y / GamePanel.scale);
+            hitBox.translate((int) (x / GamePanel.scale), (int) (y / GamePanel.scale));
+            gp.player.hitBox.translate((int) (gp.player.x / GamePanel.scale), (int) (gp.player.y / GamePanel.scale));
 
             if (hitBox.intersects(gp.player.hitBox)) {
-                //TODO: Hit
+                //TODO: Hit better
+                gp.player.Lives--;
+                gp.reset();
             }
 
             //CleanUp
-            hitBox.translate( (int) -x / GamePanel.scale, (int) -y / GamePanel.scale);
-            gp.player.hitBox.translate( (int) -gp.player.x / GamePanel.scale, (int) -gp.player.y / GamePanel.scale);
+            hitBox.translate((int) (-x / GamePanel.scale), (int) (-y / GamePanel.scale));
+            gp.player.hitBox.translate((int) (-gp.player.x / GamePanel.scale), (int) (-gp.player.y / GamePanel.scale));
         }
     }
 
     @Override
     public void draw(Graphics2D g) {
-        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer),(int) x,(int) y,hitBox.width * GamePanel.scale, hitBox.height * GamePanel.scale, null);
+        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer),(int) x,(int) y, (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
 
         if (GamePanel.debug) {
             g.setColor(Color.WHITE);
-            g.drawRect((int) (hitBox.x * GamePanel.scale + x), (int) (hitBox.y * GamePanel.scale + y), hitBox.width * GamePanel.scale, hitBox.height * GamePanel.scale);
+            g.drawRect((int) (hitBox.x * GamePanel.scale + x), (int) (hitBox.y * GamePanel.scale + y), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
         }
     }
 }

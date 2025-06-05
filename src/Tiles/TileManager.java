@@ -51,7 +51,7 @@ public class TileManager {
         //TODO: Static
         for (int y = 0;y < tiles[1].length; y++) {
             for (int x = 0; x < tiles.length; x++) {
-                g.drawImage(tileSprites.getSprite(tiles[x][y]), offsetX + x * tileSize * GamePanel.scale, offsetY + y * tileSize * GamePanel.scale, tileSize * GamePanel.scale, tileSize * GamePanel.scale, null);
+                g.drawImage(tileSprites.getSprite(tiles[x][y]), (int) (offsetX + x * tileSize * GamePanel.scale), (int) (offsetY + y * tileSize * GamePanel.scale), (int) (tileSize * GamePanel.scale), (int) (tileSize * GamePanel.scale), null);
             }
         }
     }

@@ -7,6 +7,7 @@ import Handlers.KeyHandler;
 import Handlers.WindowHandler;
 import Scenes.PlayingScene;
 import Scenes.Scene;
+import Scenes.TitleScene;
 import Tiles.TileManager;
 import util.SpriteSheet;
 
@@ -20,7 +21,25 @@ public class GamePanel extends JPanel implements Runnable {
     public static int screenwidth = 1980;
     public static int screenheight = 1080;
 
-    public static int scale = 4;
+    /**
+     * Scales:
+     * 1:
+     *  192
+     *  256
+     *
+     * 2:
+     *  384
+     *  512
+     *
+     * 3:
+     *  576
+     *  768
+     *
+     * 4:
+     *  768
+     *  10240
+     */
+    public static double scale = 4;
 
     public static int animationSpeeds = 15; //Frames per Second
 
@@ -39,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Ghost[] ghosts = new Ghost[4];
     public Coin[] coins = new Coin[200]; //More than enough
 
-    public Scene currentScene = new PlayingScene(this);
+    public Scene currentScene = new TitleScene(this);
 
     public TileManager tileManager = new TileManager();
 
@@ -114,6 +133,10 @@ public class GamePanel extends JPanel implements Runnable {
         newScene.initialize();
 
         this.currentScene = newScene;
+    }
+
+    public void reset() {
+        currentScene.reset();
     }
 
     public void update(float dt) {
