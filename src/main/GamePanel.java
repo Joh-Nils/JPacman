@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final GameFrame gf;
     public Thread gameThread;
 
+
     public static int FPS = 60;
 
     //Actors
@@ -61,6 +62,8 @@ public class GamePanel extends JPanel implements Runnable {
     public Scene currentScene = new TitleScene(this);
 
     public TileManager tileManager = new TileManager();
+
+    public AStar astar = new AStar(this);
 
     //FPS calc
     long firstFrame;

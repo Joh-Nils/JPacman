@@ -5,17 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5bea84e2-a538-4452-a65b-967d59753520" name="Changes" comment="Fourth Day - Small Changes, added Live system">
-      <change afterPath="$PROJECT_DIR$/res/images/Death.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Scenes/DeathScene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Scenes/TitleScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/AStar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Coin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Coin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Ghost.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Ghost.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Pacman.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Pacman.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Scenes/PlayingScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scenes/PlayingScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Scenes/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scenes/Scene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tiles/TileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tiles/TileManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/GamePanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,6 +21,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Exception" />
         <option value="Class" />
       </list>
     </option>
@@ -120,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748905696514</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Fourth Day - Small Changes, added Live system">
+      <option name="closed" value="true" />
+      <created>1749114566162</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1749114566162</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

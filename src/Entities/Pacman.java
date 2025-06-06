@@ -1,6 +1,7 @@
 package Entities;
 
 import Scenes.DeathScene;
+import Scenes.PlayingScene;
 import main.GamePanel;
 import util.AssetPool;
 import util.ImageTransform;
@@ -42,8 +43,12 @@ public class Pacman extends Entity {
 
         speed = 40 * GamePanel.scale;
 
-        x = 500;
-        y = 500;
+        if (gp.currentScene != null &&
+                gp.currentScene.getClass().equals(PlayingScene.class)) {
+            PlayingScene scene = (PlayingScene) gp.currentScene;
+            x = scene.PacmanStart.x;
+            y = scene.PacmanStart.y;
+        }
     }
 
     @Override
@@ -59,6 +64,10 @@ public class Pacman extends Entity {
                 direction = directionBuffer;
 
                 started = true;
+                gp.ghosts[0].started = true;
+                gp.ghosts[1].started = true;
+                gp.ghosts[2].started = true;
+                gp.ghosts[3].started = true;
             }
 
             return;
@@ -78,6 +87,23 @@ public class Pacman extends Entity {
 
         move(dt);
 
+    }
+
+    public void reset() {
+        if (gp.currentScene.getClass().equals(PlayingScene.class)) {
+            PlayingScene scene = (PlayingScene) gp.currentScene;
+            x = scene.PacmanStart.x;
+            y = scene.PacmanStart.y;
+        }
+
+
+        gp.player.started = false;
+        gp.player.directionBuffer = ' ';
+    }
+
+    public void stop() {
+        gp.player.started = false;
+        gp.player.directionBuffer = ' ';
     }
 
     private void move(float dt) {

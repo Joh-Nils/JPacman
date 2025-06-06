@@ -12,6 +12,12 @@ public class Ghost extends Entity{
     public boolean vulnerable = false;
     private GamePanel gp;
 
+    public boolean started = false;
+
+    public char direction = ' ';
+
+    private int speed;
+
     public Ghost(GamePanel gp, char color, int x, int y) {
         this.gp = gp;
         this.x = x;
@@ -24,13 +30,21 @@ public class Ghost extends Entity{
             case 'B' -> spriteSheet = AssetPool.getSpriteSheet(getURL("/images/blueGhost.png"),16,16);
         }
 
+        speed = 5;
+
         hitBox = new Rectangle(0,0,16,16);
     }
 
     @Override
     public void update(float dt) {
+        if (!started) return;
+
         walkingAnimationTimer += (float) GamePanel.animationSpeeds * dt;
         if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
+
+        direction = gp.astar.getDirection();
+
+        move(dt);
 
         if (!vulnerable) {
             hitBox.translate((int) (x / GamePanel.scale), (int) (y / GamePanel.scale));
@@ -45,6 +59,33 @@ public class Ghost extends Entity{
             //CleanUp
             hitBox.translate((int) (-x / GamePanel.scale), (int) (-y / GamePanel.scale));
             gp.player.hitBox.translate((int) (-gp.player.x / GamePanel.scale), (int) (-gp.player.y / GamePanel.scale));
+        }
+    }
+
+    public void stop() {
+        started = false;
+    }
+
+    private void move(float dt) {
+
+        //TODO Collision Handling
+        switch (direction) {
+            case 'U' -> {
+                y -= speed * dt;
+            }
+            case 'L' -> {
+                x -=  speed * dt;
+            }
+            case 'D' -> {
+                y += speed * dt;
+            }
+            case 'R' -> {
+                x += speed * dt;
+            }
+
+            default -> {
+                assert false : "Unknown Direction Key: '" + direction + "'";
+            }
         }
     }
 
