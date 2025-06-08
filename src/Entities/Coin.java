@@ -38,16 +38,16 @@ public class Coin extends Entity {
         if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
 
         //Player collection
-        hitBox.translate((int) (x / GamePanel.scale), (int) (y / GamePanel.scale));
-        gp.player.hitBox.translate((int) (gp.player.x / GamePanel.scale), (int) (gp.player.y / GamePanel.scale));
+        hitBox.translate((int) (x), (int) (y));
+        gp.player.hitBox.translate((int) (gp.player.x), (int) (gp.player.y));
 
         if (gp.player.hitBox.intersects(hitBox)) {
             use();
         }
 
         //CleanUp
-        hitBox.translate((int) (-x / GamePanel.scale), (int) (-y / GamePanel.scale));
-        gp.player.hitBox.translate((int) (-gp.player.x / GamePanel.scale), (int) (-gp.player.y / GamePanel.scale));
+        hitBox.translate((int) (-x), (int) (-y));
+        gp.player.hitBox.translate((int) (-gp.player.x), (int) (-gp.player.y));
     }
 
     @Override
@@ -55,11 +55,11 @@ public class Coin extends Entity {
         if (collected) return;
 
         BufferedImage image = spriteSheet.getSprite((int) walkingAnimationTimer);
-        g.drawImage(image,(int) x,(int) y, (int) (image.getWidth() * GamePanel.scale), (int) (image.getHeight() * GamePanel.scale), null);
+        g.drawImage(image,(int) (x * GamePanel.scale),(int) (y * GamePanel.scale), (int) (image.getWidth() * GamePanel.scale), (int) (image.getHeight() * GamePanel.scale), null);
 
         if (GamePanel.debug) {
             g.setColor(Color.WHITE);
-            g.drawRect((int) (hitBox.x * GamePanel.scale + x), (int) (hitBox.y * GamePanel.scale + y), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
+            g.drawRect((int) ((hitBox.x + x) * GamePanel.scale), (int) ((hitBox.y + y) * GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
         }
     }
 

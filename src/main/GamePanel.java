@@ -4,6 +4,7 @@ import Entities.Coin;
 import Entities.Ghost;
 import Entities.Pacman;
 import Handlers.KeyHandler;
+import Handlers.ResizeHandler;
 import Handlers.WindowHandler;
 import Scenes.PlayingScene;
 import Scenes.Scene;
@@ -17,29 +18,14 @@ import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    //Size
-    public static int screenwidth = 1980;
-    public static int screenheight = 1080;
 
-    /**
-     * Scales:
-     * 1:
-     *  192
-     *  256
-     *
-     * 2:
-     *  384
-     *  512
-     *
-     * 3:
-     *  576
-     *  768
-     *
-     * 4:
-     *  768
-     *  10240
-     */
-    public static double scale = 4;
+    public static final double ASPECT_RATIO = 259.0 / 330.0;
+
+    public static double scale = 3;
+
+    //Size
+    public static int screenwidth = (int) (scale * 259);
+    public static int screenheight = (int) (scale * 330);
 
     public static int animationSpeeds = 15; //Frames per Second
 
@@ -47,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     //System
     public final WindowHandler wHandler = new WindowHandler();
+    public final ResizeHandler rHandler = new ResizeHandler(this);
     public final KeyHandler kHandler = new KeyHandler(this);
     public final GameFrame gf;
     public Thread gameThread;
@@ -55,7 +42,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static int FPS = 60;
 
     //Actors
-    public Pacman player = new Pacman(this);
+    public Pacman player;
     public Ghost[] ghosts = new Ghost[4];
     public Coin[] coins = new Coin[200]; //More than enough
 

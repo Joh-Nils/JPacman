@@ -52,6 +52,10 @@ public class SpriteSheet {
         return sprites;
     }
 
+    public BufferedImage getOriginal() {
+        return this.image;
+    }
+
     public void setSprite(BufferedImage image, int index) {
         sprites[index] = image;
     }

@@ -1,25 +1,32 @@
 package main;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class GameFrame extends JFrame {
     GamePanel gp;
 
     public GameFrame(GamePanel gp) {
-        setSize(GamePanel.screenwidth, GamePanel.screenheight);
+        Toolkit.getDefaultToolkit().setDynamicLayout(false);
+
         setLayout(null);
         setTitle("Kindomfight");
         requestFocus();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        setResizable(true);
         //addKeyListener(new KeyHandler());
         //addMouseListener(new MouseHandler());
-        setLocationRelativeTo(null);
 
 
-        gp.setBounds(0,0, GamePanel.screenwidth, GamePanel.screenheight);
+        gp.setPreferredSize(new Dimension(GamePanel.screenwidth, GamePanel.screenheight));
         gp.setVisible(true);
-        add(gp);
+
+        setContentPane(gp);
+        pack();
+
+        setMinimumSize(new Dimension(259, 330));
+
+        setLocationRelativeTo(null);
 
         addKeyListener(gp.kHandler);
 
@@ -28,10 +35,12 @@ public class GameFrame extends JFrame {
         //addMouseWheelListener(gp.mouseHandler);
 
         addWindowListener(gp.wHandler);
+        addComponentListener(gp.rHandler);
 
         this.gp = gp;
 
         //setIcon();
+
 
         setVisible(true);
     }

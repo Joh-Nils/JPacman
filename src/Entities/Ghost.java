@@ -1,5 +1,6 @@
 package Entities;
 
+import Scenes.PlayingScene;
 import main.GamePanel;
 import util.AssetPool;
 import util.ImageTransform;
@@ -16,12 +17,15 @@ public class Ghost extends Entity{
 
     public char direction = ' ';
 
+    public char color = ' ';
+
     private int speed;
 
     public Ghost(GamePanel gp, char color, int x, int y) {
         this.gp = gp;
         this.x = x;
         this.y = y;
+        this.color = color;
 
         switch (color) {
             case 'R' -> spriteSheet = AssetPool.getSpriteSheet(getURL("/images/redGhost.png"),16,16);
@@ -44,11 +48,11 @@ public class Ghost extends Entity{
 
         direction = gp.astar.getDirection();
 
-        move(dt);
+        if (direction != ' ') move(dt);
 
         if (!vulnerable) {
-            hitBox.translate((int) (x / GamePanel.scale), (int) (y / GamePanel.scale));
-            gp.player.hitBox.translate((int) (gp.player.x / GamePanel.scale), (int) (gp.player.y / GamePanel.scale));
+            hitBox.translate((int) (x), (int) (y));
+            gp.player.hitBox.translate((int) (gp.player.x), (int) (gp.player.y));
 
             if (hitBox.intersects(gp.player.hitBox)) {
                 //TODO: Hit better
@@ -57,13 +61,37 @@ public class Ghost extends Entity{
             }
 
             //CleanUp
-            hitBox.translate((int) (-x / GamePanel.scale), (int) (-y / GamePanel.scale));
-            gp.player.hitBox.translate((int) (-gp.player.x / GamePanel.scale), (int) (-gp.player.y / GamePanel.scale));
+            hitBox.translate((int) (-x), (int) (-y));
+            gp.player.hitBox.translate((int) (-gp.player.x), (int) (-gp.player.y));
         }
     }
 
     public void stop() {
         started = false;
+    }
+
+    public void reset() {
+        if (gp.currentScene instanceof PlayingScene scene) {
+            switch (color) {
+                case 'R' -> {
+                    this.x = scene.GhostRedStart.x;
+                    this.y = scene.GhostRedStart.y;
+                }
+                case 'G' -> {
+                    this.x = scene.GhostGreenStart.x;
+                    this.y = scene.GhostGreenStart.y;
+                }
+                case 'O' -> {
+                    this.x = scene.GhostOrangeStart.x;
+                    this.y = scene.GhostOrangeStart.y;
+                }
+                case 'B' -> {
+                    this.x = scene.GhostBlueStart.x;
+                    this.y = scene.GhostBlueStart.y;
+
+                }
+            }
+        }
     }
 
     private void move(float dt) {
@@ -91,11 +119,12 @@ public class Ghost extends Entity{
 
     @Override
     public void draw(Graphics2D g) {
-        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer),(int) x,(int) y, (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+
+        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer),(int) (x * GamePanel.scale),(int) (y * GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
 
         if (GamePanel.debug) {
             g.setColor(Color.WHITE);
-            g.drawRect((int) (hitBox.x * GamePanel.scale + x), (int) (hitBox.y * GamePanel.scale + y), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
+            g.drawRect((int) ((hitBox.x + x) * GamePanel.scale), (int) ((hitBox.y + y)* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
         }
     }
 }
