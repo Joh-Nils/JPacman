@@ -22,6 +22,11 @@ public class TitleScene implements Scene {
 
     }
 
+    @Override
+    public void reScale() {
+
+    }
+
     int timer = 144 * 4;
     @Override
     public void update(float dt) {

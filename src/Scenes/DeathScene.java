@@ -22,6 +22,11 @@ public class DeathScene implements Scene {
     }
 
     @Override
+    public void reScale() {
+
+    }
+
+    @Override
     public void update(float dt) {
 
     }

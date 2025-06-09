@@ -44,7 +44,7 @@ public class Ghost extends Entity{
         if (!started) return;
 
         walkingAnimationTimer += (float) GamePanel.animationSpeeds * dt;
-        if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
+        if (walkingAnimationTimer >= spriteSheet.getSprites().length) walkingAnimationTimer = walkingAnimationTimer % spriteSheet.getSprites().length;
 
         direction = gp.astar.getDirection();
 
@@ -68,6 +68,10 @@ public class Ghost extends Entity{
 
     public void stop() {
         started = false;
+    }
+
+    public void Panic() {
+
     }
 
     public void reset() {
@@ -120,11 +124,15 @@ public class Ghost extends Entity{
     @Override
     public void draw(Graphics2D g) {
 
-        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer),(int) (x * GamePanel.scale),(int) (y * GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer),(int) ((x  + GamePanel.Padding) * GamePanel.scale),(int) (y * GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+
+        //Clones for the TP
+        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding + GamePanel.LevelWidth) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+        g.drawImage(spriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding - GamePanel.LevelWidth) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
 
         if (GamePanel.debug) {
             g.setColor(Color.WHITE);
-            g.drawRect((int) ((hitBox.x + x) * GamePanel.scale), (int) ((hitBox.y + y)* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
+            g.drawRect((int) ((hitBox.x + x + GamePanel.Padding) * GamePanel.scale), (int) ((hitBox.y + y)* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
         }
     }
 }

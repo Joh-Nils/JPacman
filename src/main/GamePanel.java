@@ -18,14 +18,21 @@ import java.awt.image.BufferedImage;
 
 public class GamePanel extends JPanel implements Runnable {
 
+    public static final int Padding = 50;
 
-    public static final double ASPECT_RATIO = 259.0 / 330.0;
+    public static final int LevelWidth = 259;
+    public static final int LevelHeight = 330;
+
+    public static final int Width = LevelWidth + Padding * 2; //Padding on each side
+    public static final int Height = LevelHeight;
+
+    public static final double ASPECT_RATIO = (double) Width / Height;
 
     public static double scale = 3;
 
     //Size
-    public static int screenwidth = (int) (scale * 259);
-    public static int screenheight = (int) (scale * 330);
+    public static int screenwidth = (int) (scale * Width);
+    public static int screenheight = (int) (scale * Height);
 
     public static int animationSpeeds = 15; //Frames per Second
 
@@ -43,8 +50,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     //Actors
     public Pacman player;
-    public Ghost[] ghosts = new Ghost[4];
-    public Coin[] coins = new Coin[200]; //More than enough
+    public Ghost[] ghosts;
+    public Coin[] coins;
 
     public Scene currentScene = new TitleScene(this);
 

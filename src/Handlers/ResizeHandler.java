@@ -32,7 +32,9 @@ public class ResizeHandler extends ComponentAdapter {
 
                 lastSize.setSize(gp.gf.getSize());
 
-                GamePanel.scale = GamePanel.screenheight / 330.0;
+                GamePanel.scale = (double) GamePanel.screenheight / GamePanel.Height;
+
+                gp.currentScene.reScale();
             }
             else if (lastSize.getWidth() != newSize.getWidth()) {
                 GamePanel.screenwidth = (int) newSize.getWidth();
@@ -45,7 +47,9 @@ public class ResizeHandler extends ComponentAdapter {
 
                 lastSize.setSize(gp.gf.getSize());
 
-                GamePanel.scale = GamePanel.screenwidth / 259.0;
+                GamePanel.scale = (double) GamePanel.screenwidth / GamePanel.Width;
+
+                gp.currentScene.reScale();
             }
         }
     }

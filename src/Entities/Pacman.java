@@ -3,6 +3,7 @@ package Entities;
 import Scenes.DeathScene;
 import Scenes.PlayingScene;
 import main.GamePanel;
+import main.Path;
 import util.AssetPool;
 import util.ImageTransform;
 import util.SpriteSheet;
@@ -93,8 +94,11 @@ public class Pacman extends Entity {
             return; //Stop Updating while dead
         }
 
-        walkingAnimationTimer += (float) GamePanel.animationSpeeds * dt;
-        if (walkingAnimationTimer > spriteSheet.getSprites().length) walkingAnimationTimer -= spriteSheet.getSprites().length;
+        if (direction != ' ') {
+            walkingAnimationTimer += (float) GamePanel.animationSpeeds * dt;
+            if (walkingAnimationTimer >= spriteSheet.getSprites().length)
+                walkingAnimationTimer = walkingAnimationTimer % spriteSheet.getSprites().length;
+        }
 
         move(dt);
 
@@ -159,21 +163,76 @@ public class Pacman extends Entity {
                 x += speed * dt;
             }
 
+            case ' ' -> {}
+
             default -> {
                 assert false : "Unknown Direction Key: '" + direction + "'";
             }
         }
+
+        //Hideous and imperformant solution
+        if (gp.currentScene instanceof PlayingScene playingScene) {
+            for (Path path : playingScene.PathPoints) {
+                double distanceX = path.x() - this.x;
+                double distanceY = path.y() - this.y;
+                double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                if (distance < 1) { //Not a great solution but if it works, it works
+                    if (!path.directions().contains(String.valueOf(direction))) {
+                        //Stop
+                        direction = ' ';
+                        x = path.x();
+                        y = path.y();
+                    }
+                }
+            }
+        }
+
+        if (x > GamePanel.LevelWidth) {
+            x = x % GamePanel.LevelWidth;
+        }
+        else if (x + hitBox.width < 0) {
+            x = ((x % GamePanel.LevelWidth) + GamePanel.LevelWidth);
+        }
     }
     private boolean checkValidInput() {
         if (directionBuffer == ' ') return false;
+        if (!started && (directionBuffer == 'R' || directionBuffer == 'L')) return true;
 
-        return true; //TODO
+        if (gp.currentScene instanceof PlayingScene playingScene) {
+            if (isOpposite(direction, directionBuffer)) {
+                return true;
+            }
+
+            for (Path path : playingScene.PathPoints) {
+                double distanceX = path.x() - this.x;
+                double distanceY = path.y() - this.y;
+                double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                if (distance < 1) { //Not a great solution but if it works, it works
+                    if (path.directions().contains(String.valueOf(directionBuffer))) {
+                        x = path.x(); //Correct alignment
+                        y = path.y();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        return true;
+    }
+    private boolean isOpposite(char a, char b) {
+        return (a == 'U' && b == 'D') ||
+                (a == 'D' && b == 'U') ||
+                (a == 'L' && b == 'R') ||
+                (a == 'R' && b == 'L');
     }
 
+    SpriteSheet drawSpriteSheet = null;
     @Override
     public void draw(Graphics2D g) {
         if (walkingAnimationTimer < spriteSheet.getSprites().length) {
-            SpriteSheet drawSpriteSheet = null;
 
             switch (direction) {
                 case 'U' -> {
@@ -191,17 +250,22 @@ public class Pacman extends Entity {
                 case 'Z' -> {
                     drawSpriteSheet = Death;
                 }
+                case ' ' -> {}
 
                 default -> {
                     assert false : "Unknown Direction Key: '" + direction + "'";
                 }
             }
-            g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer), (int) (x * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+            g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+
+            //Clones for the TP
+            g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding + GamePanel.LevelWidth) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+            g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding - GamePanel.LevelWidth) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
         }
 
         if (GamePanel.debug) {
             g.setColor(Color.WHITE);
-            g.drawRect((int) ((hitBox.x + x) * GamePanel.scale), (int) ((hitBox.y + y) * GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
+            g.drawRect((int) ((hitBox.x + x + GamePanel.Padding) * GamePanel.scale), (int) ((hitBox.y + y) * GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
         }
     }
 }

@@ -24,7 +24,7 @@ public class GameFrame extends JFrame {
         setContentPane(gp);
         pack();
 
-        setMinimumSize(new Dimension(259, 330));
+        setMinimumSize(new Dimension(GamePanel.Width, GamePanel.Height));
 
         setLocationRelativeTo(null);
 
