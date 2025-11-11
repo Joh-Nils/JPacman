@@ -1,6 +1,6 @@
 package Entities;
 
-import Scenes.DeathScene;
+import Scenes.GameOverScene;
 import Scenes.PlayingScene;
 import main.GamePanel;
 import main.Path;
@@ -19,7 +19,10 @@ public class Pacman extends Entity {
     public final double speed;
 
     public int Score = 0;
+    public int pelletsEaten = 0;
     public int Lives = 3;
+
+    public int ghostMultiplier = 200;
 
     //Overlapping Memory with KeyHandler
     public boolean upPressed = false;
@@ -33,7 +36,7 @@ public class Pacman extends Entity {
 
     public boolean started;
 
-    private SpriteSheet Death;
+    private SpriteSheet spriteSheetDeath;
 
     public Pacman(GamePanel gp, Point Start) {
         this.gp = gp;
@@ -42,9 +45,9 @@ public class Pacman extends Entity {
         spriteSheetLeft = ImageTransform.flipSpriteSheet(spriteSheet);
         spriteSheetUp = ImageTransform.rotateSpriteSheet(spriteSheet,-90);
         spriteSheetDown = ImageTransform.rotateSpriteSheet(spriteSheet,90);
-        Death = AssetPool.getSpriteSheet(getURL("/images/Death.png"),16,16);
+        spriteSheetDeath = AssetPool.getSpriteSheet(getURL("/images/Death.png"),16,16);
 
-        hitBox = new Rectangle(0,0,16,16);
+        hitBox = new Rectangle(4,4,8,8);
 
         speed = 40;
 
@@ -54,7 +57,16 @@ public class Pacman extends Entity {
 
     @Override
     public void update(float dt) {
-        //Started?
+        if (Lives <= 0) {
+            walkingAnimationTimer += (float) 5 * dt;
+
+            if (walkingAnimationTimer > spriteSheet.getSprites().length && gp.currentScene instanceof PlayingScene playingScene) {
+                playingScene.gameOver();
+            }
+
+            return;
+        }
+
         if (!started) {
             if (direction == 'Z') {
                 walkingAnimationTimer += (float) 5 * dt;
@@ -76,22 +88,10 @@ public class Pacman extends Entity {
                 direction = directionBuffer;
 
                 started = true;
-                gp.ghosts[0].started = true;
-                gp.ghosts[1].started = true;
-                gp.ghosts[2].started = true;
-                gp.ghosts[3].started = true;
+                gp.ghosts[0].start();
             }
 
             return;
-        }
-
-        //Check Lives
-        if (Lives <= 0) {
-            if (!gp.currentScene.getClass().equals(DeathScene.class)) {
-                gp.changeScene(new DeathScene(gp));
-            }
-
-            return; //Stop Updating while dead
         }
 
         if (direction != ' ') {
@@ -148,7 +148,6 @@ public class Pacman extends Entity {
             }
         }
 
-        //TODO Collision Handling
         switch (direction) {
             case 'U' -> {
                 y -= speed * dt;
@@ -229,9 +228,34 @@ public class Pacman extends Entity {
                 (a == 'R' && b == 'L');
     }
 
+    public Point getAheadPosition(int tiles, boolean bug) {
+        return switch (direction) {
+
+            case 'L' -> new Point((int) x - tiles * 16, (int) y);
+            case 'R' -> new Point((int) x + tiles * 16, (int) y);
+            case 'U' -> {
+                if (bug) yield new Point((int) x - tiles * 16, (int) y - tiles * 16);
+                else yield new Point((int) x, (int) y - tiles * 16);
+            }
+            case 'D' -> new Point((int) x, (int) y + tiles * 16);
+
+            default -> new Point((int) x, (int) y);
+        };
+    }
+
+    public SpriteSheet getSpriteSheet() {
+        return spriteSheet;
+    }
+
     SpriteSheet drawSpriteSheet = null;
     @Override
     public void draw(Graphics2D g) {
+        int drawX = (int) ((x + GamePanel.Padding) * GamePanel.scale);
+        int drawY = (int) (y * GamePanel.scale);
+
+        int cloneLeftDrawX = (int) ((x + GamePanel.Padding - GamePanel.LevelWidth) * GamePanel.scale);
+        int cloneRightDrawX = (int) ((x + GamePanel.Padding + GamePanel.LevelWidth) * GamePanel.scale);
+
         if (walkingAnimationTimer < spriteSheet.getSprites().length) {
 
             switch (direction) {
@@ -248,7 +272,7 @@ public class Pacman extends Entity {
                     drawSpriteSheet = spriteSheet;
                 }
                 case 'Z' -> {
-                    drawSpriteSheet = Death;
+                    drawSpriteSheet = spriteSheetDeath;
                 }
                 case ' ' -> {}
 
@@ -256,11 +280,8 @@ public class Pacman extends Entity {
                     assert false : "Unknown Direction Key: '" + direction + "'";
                 }
             }
-            g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
 
-            //Clones for the TP
-            g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding + GamePanel.LevelWidth) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
-            g.drawImage(drawSpriteSheet.getSprite((int) walkingAnimationTimer), (int) ((x + GamePanel.Padding - GamePanel.LevelWidth) * GamePanel.scale), (int) (y* GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale), null);
+            draw(g, drawSpriteSheet, drawX, drawY, cloneLeftDrawX, cloneRightDrawX);
         }
 
         if (GamePanel.debug) {
@@ -268,4 +289,11 @@ public class Pacman extends Entity {
             g.drawRect((int) ((hitBox.x + x + GamePanel.Padding) * GamePanel.scale), (int) ((hitBox.y + y) * GamePanel.scale), (int) (hitBox.width * GamePanel.scale), (int) (hitBox.height * GamePanel.scale));
         }
     }
+
+    private void draw(Graphics2D g, SpriteSheet spriteSheet, int x,int y, int cloneLeftX, int cloneRightX) {
+        drawSpriteSheet(g, spriteSheet,(int) walkingAnimationTimer, x, y);
+
+        //Clones for the TP
+        drawSpriteSheet(g, spriteSheet,(int) walkingAnimationTimer, cloneLeftX, y);
+        drawSpriteSheet(g, spriteSheet,(int) walkingAnimationTimer, cloneRightX, y);}
 }

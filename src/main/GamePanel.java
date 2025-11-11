@@ -9,12 +9,12 @@ import Handlers.WindowHandler;
 import Scenes.PlayingScene;
 import Scenes.Scene;
 import Scenes.TitleScene;
-import Tiles.TileManager;
 import util.SpriteSheet;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -53,9 +53,9 @@ public class GamePanel extends JPanel implements Runnable {
     public Ghost[] ghosts;
     public Coin[] coins;
 
-    public Scene currentScene = new TitleScene(this);
+    public Scene currentScene;
 
-    public TileManager tileManager = new TileManager();
+    private ArrayList<Scene> sceneBuffer = new ArrayList<>();
 
     public AStar astar = new AStar(this);
 
@@ -91,8 +91,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        currentScene.initialize();
-
         gf = new GameFrame(this);
         start();
     }
@@ -127,17 +125,51 @@ public class GamePanel extends JPanel implements Runnable {
     public void changeScene(Scene newScene) {
         assert newScene != null : "New Scene cant be null";
 
+        boolean store = true;
+        for (Scene s: sceneBuffer) {
+            if (s.getClass().equals(newScene.getClass())) {
+                System.out.println("Warning: You are creating a new Instance of " + newScene.getClass() + "!");
+            }
+            if (s.getClass().equals(currentScene.getClass())) {
+                store = false;
+            }
+        }
+        if (store && currentScene != null) sceneBuffer.add(currentScene);
+
         newScene.initialize();
 
         this.currentScene = newScene;
     }
 
+    public void changeScene (Class<? extends Scene> newScene) {
+        assert newScene != null : "New Scene cant be null";
+
+        Scene scene = null;
+        boolean store = true;
+        for (Scene s: sceneBuffer) {
+            if (s.getClass().equals(newScene)) {
+                scene = s;
+            }
+            if (s.getClass().equals(currentScene.getClass())) {
+                store = false;
+            }
+        }
+
+        assert scene != null : "Scene not found: " + newScene;
+
+        if (store && currentScene != null) sceneBuffer.add(currentScene);
+
+        scene.reset();
+
+        this.currentScene = scene;
+    }
+
     public void reset() {
-        currentScene.reset();
+        if (currentScene != null) currentScene.reset();
     }
 
     public void update(float dt) {
-        currentScene.update(dt);
+        if (currentScene != null) currentScene.update(dt);
     }
 
     @Override
@@ -146,7 +178,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        currentScene.draw(g2);
+        if (currentScene != null) currentScene.draw(g2);
 
         if (GamePanel.debug) {
             frames++;

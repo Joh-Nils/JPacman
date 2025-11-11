@@ -71,12 +71,14 @@ public class Coin extends Entity {
     public void use() {
         collected = true;
         gp.player.Score += big ? 50 : 10;
+        gp.player.pelletsEaten++;
 
         if (big) {
             gp.ghosts[0].Panic();
             gp.ghosts[1].Panic();
             gp.ghosts[2].Panic();
             gp.ghosts[3].Panic();
+            gp.player.ghostMultiplier = 200;
         }
     }
 }

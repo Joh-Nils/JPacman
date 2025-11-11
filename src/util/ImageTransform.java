@@ -44,7 +44,7 @@ public class ImageTransform {
     }
 
     public static SpriteSheet rotateSpriteSheet(SpriteSheet original, double degrees) {
-        SpriteSheet rotated = new SpriteSheet(original.getSprites().length);
+        SpriteSheet rotated = new SpriteSheet(original.getSprites().length, original.getSpriteWidth(), original.getSpriteHeight());
 
         for (int i = 0;i < rotated.getSprites().length;i++) {
             rotated.setSprite(rotateImage(original.getSprite(i),degrees),i);
@@ -53,7 +53,7 @@ public class ImageTransform {
         return rotated;
     }
     public static SpriteSheet flipSpriteSheet(SpriteSheet original) {
-        SpriteSheet flipped = new SpriteSheet(original.getSprites().length);
+        SpriteSheet flipped = new SpriteSheet(original.getSprites().length, original.getSpriteWidth(), original.getSpriteHeight());
 
         for (int i = 0; i < flipped.getSprites().length; i++) {
             flipped.setSprite(flipImage(original.getSprite(i)),i);

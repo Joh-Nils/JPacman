@@ -5,6 +5,7 @@ import Entities.Ghost;
 import Entities.Pacman;
 import main.GamePanel;
 import main.Path;
+import util.SpriteSheet;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,12 +14,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static util.getURL.getURL;
 
 public class PlayingScene implements Scene{
     private GamePanel gp;
+
+    private GameOverScene gameOverScene;
 
     public boolean paused = false;
 
@@ -27,17 +29,22 @@ public class PlayingScene implements Scene{
     public Point GhostGreenStart;
     public Point GhostOrangeStart;
     public Point GhostRedStart;
+    public Point GhostBlueScatterPoint;
+    public Point GhostGreenScatterPoint;
+    public Point GhostOrangeScatterPoint;
+    public Point GhostRedScatterPoint;
 
     public int Level = 1;
 
     public BufferedImage LevelImage;
 
-    private Font ScoreFont;
+    Font ScoreFont;
 
     public Path[] PathPoints;
 
     public PlayingScene(GamePanel gp) {
         this.gp = gp;
+        this.gameOverScene = new GameOverScene(gp, this);
     }
 
     @Override
@@ -47,9 +54,14 @@ public class PlayingScene implements Scene{
         PacmanStart = new Point(121,221);
 
         GhostBlueStart = new Point(137,132);
-        GhostGreenStart = new Point(106,132);
-        GhostOrangeStart = new Point(121,132);
-        GhostRedStart = new Point(121,117);
+        GhostGreenStart = new Point(121,132);
+        GhostOrangeStart = new Point(106,132);
+        GhostRedStart = new Point(121,101);
+
+        GhostBlueScatterPoint = new Point(1,313);
+        GhostGreenScatterPoint = new Point(229,1);
+        GhostOrangeScatterPoint = new Point(241,313);
+        GhostRedScatterPoint = new Point(13,1);
 
         gp.player = new Pacman(gp, PacmanStart);
 
@@ -102,13 +114,13 @@ public class PlayingScene implements Scene{
             }
 
             PathPoints = paths.toArray(new Path[0]);
+            gp.astar.setPathPoints(PathPoints);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
 
         try {
-            // Load the TTF file from resources or file system
             InputStream is = getURL("/Fonts/PressStart2P.ttf").openStream();
             ScoreFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont((float) (8 * GamePanel.scale));
         } catch (Exception e) {
@@ -121,6 +133,9 @@ public class PlayingScene implements Scene{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
+        gameOverScene.initialize();
     }
 
     @Override
@@ -158,6 +173,8 @@ public class PlayingScene implements Scene{
             ghost.update(dt);
         }
 
+        Ghost.updateScatterTimer(dt);
+
         if (gp.player.started) {
             for (Coin coin : gp.coins) {
                 if (coin != null) coin.update(dt);
@@ -166,10 +183,68 @@ public class PlayingScene implements Scene{
 
     }
 
+    public void gameOver() {
+        if (gameOverScene != null) {
+            gp.changeScene(gameOverScene);
+            gameOverScene = null;
+        }
+        else {
+            gp.changeScene(GameOverScene.class);
+        }
+    }
+
     @Override
     public void draw(Graphics2D g) {
-        //gp.tileManager.draw(g,400,0);
+        g.drawImage(LevelImage, (int) (GamePanel.Padding * GamePanel.scale), 0, (int) (LevelImage.getWidth() * GamePanel.scale), (int) (LevelImage.getHeight() * GamePanel.scale), null);
 
+        gp.player.draw(g);
+
+        for (Coin coin: gp.coins) {
+            if (coin != null) coin.draw(g);
+        }
+
+        for (Ghost ghost: gp.ghosts) {
+            ghost.draw(g);
+        }
+
+        //Overlapping Characters
+        g.setColor(gp.getBackground());
+        g.fillRect(0,0, (int) (GamePanel.Padding * GamePanel.scale), GamePanel.screenheight);
+        g.fillRect((int) ((GamePanel.LevelWidth + GamePanel.Padding) * GamePanel.scale),0, (int) ((GamePanel.Padding + 5) * GamePanel.scale), GamePanel.screenheight);
+
+        //UI
+        g.setColor(Color.WHITE);
+        g.setFont(ScoreFont);
+        String text = String.valueOf(gp.player.Score);
+        FontMetrics metrics = g.getFontMetrics();
+        Rectangle2D bounds = metrics.getStringBounds(text,g);
+
+        //                                                 Padding                                         Padding
+        g.drawString(text, (int) (GamePanel.screenwidth - 5 * GamePanel.scale - bounds.getWidth()),(int) (5 * GamePanel.scale + metrics.getAscent()));
+
+        //Lives
+        for (int i = 1;i < gp.player.Lives + 1;i++) {
+            drawSpriteSheet(g, gp.player.getSpriteSheet(), 6, (int) (GamePanel.screenwidth - (2 + 18 * i) * GamePanel.scale), (int) (5 * GamePanel.scale + metrics.getStringBounds(text, g).getHeight()) + 21);
+        }
+        if (GamePanel.debug) {
+            for (Path p : PathPoints) {
+                g.setColor(Color.ORANGE);
+                int x = (int) ((p.x() + GamePanel.Padding + 7) * GamePanel.scale);
+                int y = (int) ((p.y() + 7) * GamePanel.scale);
+
+                g.setColor(Color.GREEN);
+                if (p.directions().contains("U")) g.drawLine(x, y, x, y - 10);
+                if (p.directions().contains("L")) g.drawLine(x, y, x - 10, y);
+                if (p.directions().contains("D")) g.drawLine(x, y, x, y + 10);
+                if (p.directions().contains("R")) g.drawLine(x, y, x + 10, y);
+
+
+                //AStar.drawDebug(g);
+            }
+        }
+    }
+
+    void drawWithoutUI(Graphics2D g) {
         g.drawImage(LevelImage, (int) (GamePanel.Padding * GamePanel.scale), 0, (int) (LevelImage.getWidth() * GamePanel.scale), (int) (LevelImage.getHeight() * GamePanel.scale), null);
 
         gp.player.draw(g);
@@ -185,17 +260,7 @@ public class PlayingScene implements Scene{
         //Overlapping Characters
         g.setColor(gp.getBackground());
         g.fillRect(0,0, (int) (GamePanel.Padding * GamePanel.scale), GamePanel.screenheight);
-        g.fillRect((int) ((GamePanel.LevelWidth + GamePanel.Padding) * GamePanel.scale),0, (int) (GamePanel.Padding * GamePanel.scale), GamePanel.screenheight);
-
-        //UI
-        g.setColor(Color.WHITE);
-        g.setFont(ScoreFont);
-        String text = String.valueOf(gp.player.Score);
-        FontMetrics metrics = g.getFontMetrics();
-        Rectangle2D bounds = metrics.getStringBounds(text,g);
-
-        //                                                 Padding                                         Padding
-        g.drawString(text, (int) (GamePanel.screenwidth - 5 * GamePanel.scale - bounds.getWidth()),(int) (5 * GamePanel.scale + metrics.getAscent()));
+        g.fillRect((int) ((GamePanel.LevelWidth + GamePanel.Padding) * GamePanel.scale),0, (int) ((GamePanel.Padding + 5) * GamePanel.scale), GamePanel.screenheight);
 
         if (GamePanel.debug) {
             for (Path p : PathPoints) {
@@ -208,7 +273,15 @@ public class PlayingScene implements Scene{
                 if (p.directions().contains("L")) g.drawLine(x, y, x - 10, y);
                 if (p.directions().contains("D")) g.drawLine(x, y, x, y + 10);
                 if (p.directions().contains("R")) g.drawLine(x, y, x + 10, y);
+
+
+                //AStar.drawDebug(g);
             }
         }
+    }
+
+
+    private void drawSpriteSheet(Graphics2D g, SpriteSheet spriteSheet, int timer, int x, int y) {
+        g.drawImage(spriteSheet.getSprite(timer), x, y, (int) (spriteSheet.getSpriteWidth() * GamePanel.scale), (int) (spriteSheet.getSpriteHeight() * GamePanel.scale), null);
     }
 }

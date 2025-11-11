@@ -8,6 +8,8 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
     private GamePanel gp;
 
+    public boolean somethingPressed = false;
+
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
     }
@@ -29,6 +31,8 @@ public class KeyHandler implements KeyListener {
             else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT)
                 gp.player.rightPressed = true;
         }
+
+        somethingPressed = true;
     }
 
     @Override
@@ -44,5 +48,6 @@ public class KeyHandler implements KeyListener {
                 gp.player.rightPressed = false;
         }
 
+        somethingPressed = false;
     }
 }
