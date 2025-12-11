@@ -9,28 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5bea84e2-a538-4452-a65b-967d59753520" name="Changes" comment="Sixth Day - made the Tile Picture, set the actual starting positions">
-      <change afterPath="$PROJECT_DIR$/res/images/eyeMask.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/frightenedGhost.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/images/frightenedHighlightGhost.png" afterDir="false" />
+    <list default="true" id="5bea84e2-a538-4452-a65b-967d59753520" name="Changes" comment="Added some stuff">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/Level/Paths.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/Level/Paths.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/Level/level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Coin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Coin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Entity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Ghost.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Ghost.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Pacman.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Pacman.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Handlers/KeyHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Handlers/KeyHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Handlers/ResizeHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Handlers/ResizeHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Scenes/DeathScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scenes/GameOverScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Scenes/PlayingScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scenes/PlayingScene.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Scenes/TitleScene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Scenes/TitleScene.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Tiles/TileManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/AStar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AStar.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/ImageTransform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/ImageTransform.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/SpriteSheet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/SpriteSheet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,7 +140,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749421273258</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added some stuff">
+      <option name="closed" value="true" />
+      <created>1762860456687</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762860456687</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -174,6 +167,7 @@
     <MESSAGE value="First Day - Created Foundation to build upon. Test Space to test Pacman behavior." />
     <MESSAGE value="Fourth Day - Small Changes, added Live system" />
     <MESSAGE value="Sixth Day - made the Tile Picture, set the actual starting positions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sixth Day - made the Tile Picture, set the actual starting positions" />
+    <MESSAGE value="Added some stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added some stuff" />
   </component>
 </project>

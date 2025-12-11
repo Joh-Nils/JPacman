@@ -186,7 +186,6 @@ public class PlayingScene implements Scene{
     public void gameOver() {
         if (gameOverScene != null) {
             gp.changeScene(gameOverScene);
-            gameOverScene = null;
         }
         else {
             gp.changeScene(GameOverScene.class);

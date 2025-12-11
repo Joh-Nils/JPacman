@@ -1,5 +1,6 @@
 package Handlers;
 
+import Scenes.TitleScene;
 import main.GamePanel;
 
 import java.awt.event.KeyEvent;
@@ -46,6 +47,10 @@ public class KeyHandler implements KeyListener {
                 gp.player.downPressed = false;
             else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT)
                 gp.player.rightPressed = false;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_R) {
+            gp.changeScene(TitleScene.class);
         }
 
         somethingPressed = false;

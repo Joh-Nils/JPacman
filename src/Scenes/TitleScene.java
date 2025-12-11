@@ -33,7 +33,7 @@ public class TitleScene implements Scene {
 
     @Override
     public void reset() {
-
+        reScale();
     }
 
     @Override
@@ -53,7 +53,6 @@ public class TitleScene implements Scene {
         if (gp.kHandler.somethingPressed) {
             if (playingScene != null) {
                 gp.changeScene(playingScene);
-                playingScene = null;
             }
             else gp.changeScene(PlayingScene.class);
         }

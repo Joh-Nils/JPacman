@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public Scene currentScene;
 
-    private ArrayList<Scene> sceneBuffer = new ArrayList<>();
+    public ArrayList<Scene> sceneBuffer = new ArrayList<>();
 
     public AStar astar = new AStar(this);
 
@@ -156,8 +156,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         assert scene != null : "Scene not found: " + newScene;
-
-        if (store && currentScene != null) sceneBuffer.add(currentScene);
 
         scene.reset();
 

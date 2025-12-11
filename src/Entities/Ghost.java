@@ -444,7 +444,7 @@ public class Ghost extends Entity{
 
         if (frightened > 0) currentSpeed = frightenedSpeed;
         else if (scatter) currentSpeed = scatterSpeed;
-        else if (returnHome) currentSpeed = speed;
+        else if (returnHome) currentSpeed = 2 * speed;
 
         switch (direction) {
             case 'U' -> {
