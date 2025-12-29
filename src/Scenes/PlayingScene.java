@@ -18,9 +18,9 @@ import java.util.ArrayList;
 import static util.getURL.getURL;
 
 public class PlayingScene implements Scene{
-    private GamePanel gp;
+    private final GamePanel gp;
 
-    private GameOverScene gameOverScene;
+    private final GameOverScene gameOverScene;
 
     public boolean paused = false;
 
@@ -33,8 +33,6 @@ public class PlayingScene implements Scene{
     public Point GhostGreenScatterPoint;
     public Point GhostOrangeScatterPoint;
     public Point GhostRedScatterPoint;
-
-    public int Level = 1;
 
     public BufferedImage LevelImage;
 

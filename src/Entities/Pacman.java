@@ -1,6 +1,5 @@
 package Entities;
 
-import Scenes.GameOverScene;
 import Scenes.PlayingScene;
 import main.GamePanel;
 import main.Path;
@@ -13,7 +12,7 @@ import java.awt.*;
 import static util.getURL.getURL;
 
 public class Pacman extends Entity {
-    private GamePanel gp;
+    private final GamePanel gp;
 
     //Constants
     public final double speed;
@@ -36,7 +35,7 @@ public class Pacman extends Entity {
 
     public boolean started;
 
-    private SpriteSheet spriteSheetDeath;
+    private final SpriteSheet spriteSheetDeath;
 
     public Pacman(GamePanel gp, Point Start) {
         this.gp = gp;

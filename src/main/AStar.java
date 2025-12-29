@@ -4,17 +4,13 @@ import Scenes.PlayingScene;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 public class AStar {
-    private GamePanel gp;
+    private final GamePanel gp;
 
     private Path[] pathPoints;
 
-    private static Node tree;
-
-
-    public AStar (GamePanel gp) {
+    public AStar(GamePanel gp) {
         this.gp = gp;
     }
 
@@ -27,7 +23,7 @@ public class AStar {
 
         Node tree = new Node(x, y);
 
-        NeighbourStruct ns = getNeighbours(x,y, tree);
+        NeighbourStruct ns = getNeighbours(x, y, tree);
 
         switch (not) {
             case 'U' -> ns.Up = null;
@@ -91,20 +87,17 @@ public class AStar {
 
             if (tree.x() == goalX && tree.y() == goalY) {
                 return tree;
-            }
-            else if (tree.x() == goalX && tree.parent() != null) {
+            } else if (tree.x() == goalX && tree.parent() != null) {
                 if ((tree.y() > goalY && tree.parent().y() < goalY) ||
                         (tree.y() < goalY && tree.parent().y() > goalY)) {
                     return tree;
                 }
-            }
-            else if (tree.y() == goalY && tree.parent() != null) {
+            } else if (tree.y() == goalY && tree.parent() != null) {
                 if ((tree.x() > goalX && tree.parent().x() < goalX) ||
                         (tree.x() < goalX && tree.parent().x() > goalX)) {
                     return tree;
                 }
             }
-
 
 
             NeighbourStruct ns = tree.getKinds();
@@ -113,120 +106,104 @@ public class AStar {
             if (ns.Up != null && checked.add(ns.Up)) {
                 ns.Up.setNeighbours(getNeighbours(ns.Up.x(), ns.Up.y(), ns.Up));
                 queue.add(ns.Up);
-            }
-            else if (ns.Up != null && checked.contains(ns.Up)) {
+            } else if (ns.Up != null && checked.contains(ns.Up)) {
                 Node n = ns.Up;
 
                 if (n.x() == goalX && n.y() == goalY) {
                     n.setParent(tree);
                     return n;
-                }
-                else if (n.x() == goalX) {
+                } else if (n.x() == goalX) {
                     if ((n.y() > goalY && tree.y() < goalY) ||
                             (n.y() < goalY && tree.y() > goalY)) {
                         n.setParent(tree);
                         return n;
                     }
-                }
-                else if (n.y() == goalY) {
+                } else if (n.y() == goalY) {
                     if ((n.x() > goalX && tree.x() < goalX) ||
                             (n.x() < goalX && tree.x() > goalX)) {
                         n.setParent(tree);
                         return n;
                     }
                 }
-            }
-            else if (ns.Up != null && ns.Up.equals(tree.parent())) {
+            } else if (ns.Up != null && ns.Up.equals(tree.parent())) {
                 ns.Up = null;
             }
 
             if (ns.Down != null && checked.add(ns.Down)) {
                 ns.Down.setNeighbours(getNeighbours(ns.Down.x(), ns.Down.y(), ns.Down));
                 queue.add(ns.Down);
-            }
-            else if (ns.Down != null && checked.contains(ns.Down)) {
+            } else if (ns.Down != null && checked.contains(ns.Down)) {
                 Node n = ns.Down;
 
                 if (n.x() == goalX && n.y() == goalY) {
                     n.setParent(tree);
                     return n;
-                }
-                else if (n.x() == goalX) {
+                } else if (n.x() == goalX) {
                     if ((n.y() > goalY && tree.y() < goalY) ||
                             (n.y() < goalY && tree.y() > goalY)) {
                         n.setParent(tree);
                         return n;
                     }
-                }
-                else if (n.y() == goalY) {
+                } else if (n.y() == goalY) {
                     if ((n.x() > goalX && tree.x() < goalX) ||
                             (n.x() < goalX && tree.x() > goalX)) {
                         n.setParent(tree);
                         return n;
                     }
                 }
-            }
-            else if (ns.Down != null && ns.Down.equals(tree.parent())) {
+            } else if (ns.Down != null && ns.Down.equals(tree.parent())) {
                 ns.Down = null;
             }
 
             if (ns.Left != null && checked.add(ns.Left)) {
                 ns.Left.setNeighbours(getNeighbours(ns.Left.x(), ns.Left.y(), ns.Left));
                 queue.add(ns.Left);
-            }
-            else if (ns.Left != null && checked.contains(ns.Left)) {
+            } else if (ns.Left != null && checked.contains(ns.Left)) {
                 Node n = ns.Left;
 
                 if (n.x() == goalX && n.y() == goalY) {
                     n.setParent(tree);
                     return n;
-                }
-                else if (n.x() == goalX) {
+                } else if (n.x() == goalX) {
                     if ((n.y() > goalY && tree.y() < goalY) ||
                             (n.y() < goalY && tree.y() > goalY)) {
                         n.setParent(tree);
                         return n;
                     }
-                }
-                else if (n.y() == goalY) {
+                } else if (n.y() == goalY) {
                     if ((n.x() > goalX && tree.x() < goalX) ||
                             (n.x() < goalX && tree.x() > goalX)) {
                         n.setParent(tree);
                         return n;
                     }
                 }
-            }
-            else if (ns.Left != null && ns.Left.equals(tree.parent())){
+            } else if (ns.Left != null && ns.Left.equals(tree.parent())) {
                 ns.Left = null;
             }
 
             if (ns.Right != null && checked.add(ns.Right)) {
                 ns.Right.setNeighbours(getNeighbours(ns.Right.x(), ns.Right.y(), ns.Right));
                 queue.add(ns.Right);
-            }
-            else if (ns.Right != null && checked.contains(ns.Right)) {
+            } else if (ns.Right != null && checked.contains(ns.Right)) {
                 Node n = ns.Right;
 
                 if (n.x() == goalX && n.y() == goalY) {
                     n.setParent(tree);
                     return n;
-                }
-                else if (n.x() == goalX) {
+                } else if (n.x() == goalX) {
                     if ((n.y() > goalY && tree.y() < goalY) ||
                             (n.y() < goalY && tree.y() > goalY)) {
                         n.setParent(tree);
                         return n;
                     }
-                }
-                else if (n.y() == goalY) {
+                } else if (n.y() == goalY) {
                     if ((n.x() > goalX && tree.x() < goalX) ||
                             (n.x() < goalX && tree.x() > goalX)) {
                         n.setParent(tree);
                         return n;
                     }
                 }
-            }
-            else if (ns.Right != null && ns.Right.equals(tree.parent())){
+            } else if (ns.Right != null && ns.Right.equals(tree.parent())) {
                 ns.Right = null;
             }
         }
@@ -243,14 +220,13 @@ public class AStar {
         int LeftAbs = Integer.MAX_VALUE;
         int RightAbs = Integer.MAX_VALUE;
 
-        for (Path path: pathPoints) {
+        for (Path path : pathPoints) {
             if (path.x() == x) {
                 int abs = Math.abs(path.y() - y);
                 if (path.directions().contains("D") && path.y() < y && UpAbs > abs) {
                     neighbourStruct.Up = new Node(path.x(), path.y(), path.directions(), parent);
                     UpAbs = abs;
-                }
-                else if (path.directions().contains("U") && path.y() > y  && DownAbs > abs) {
+                } else if (path.directions().contains("U") && path.y() > y && DownAbs > abs) {
                     neighbourStruct.Down = new Node(path.x(), path.y(), path.directions(), parent);
                     DownAbs = abs;
                 }
@@ -272,8 +248,7 @@ public class AStar {
                 if (path.directions().contains("R") && path.x() < x && LeftAbs > abs) {
                     neighbourStruct.Left = new Node(path.x(), path.y(), path.directions(), parent);
                     LeftAbs = abs;
-                }
-                else if (path.directions().contains("L") && path.x() > x && RightAbs > abs) {
+                } else if (path.directions().contains("L") && path.x() > x && RightAbs > abs) {
                     neighbourStruct.Right = new Node(path.x(), path.y(), path.directions(), parent);
                     RightAbs = abs;
                 }
@@ -290,74 +265,6 @@ public class AStar {
         }
 
         return neighbourStruct;
-    }
-
-    public static void drawDebug(Graphics2D g) {
-        if (tree == null) return;
-
-        g.setStroke(new BasicStroke(4));
-
-        drawDebugTree(g, tree);
-    }
-
-    private static void drawDebugTree(Graphics2D g, Node tree) {
-        if (tree == null) return;
-
-        NeighbourStruct neighbours = tree.getKinds();
-        if (neighbours == null) return;
-
-        if (neighbours.Up != null) {
-            g.setColor(Color.RED);
-            int x = (int) ((tree.x() + GamePanel.Padding + 7) * GamePanel.scale);
-            int y = (int) (tree.y() * GamePanel.scale);
-            int nx = (int) ((neighbours.Up.x() + 7 + GamePanel.Padding) * GamePanel.scale);
-            int ny = (int) ((neighbours.Up.y() + 16) * GamePanel.scale);
-
-            g.drawLine(x, y, nx, ny);
-            g.drawLine(nx, ny, (int) (nx - 3 * GamePanel.scale), (int) (ny + 3 * GamePanel.scale));
-            g.drawLine(nx, ny, (int) (nx + 3 * GamePanel.scale), (int) (ny + 3 * GamePanel.scale));
-        }
-        if (neighbours.Down != null) {
-            g.setColor(Color.BLUE);
-            int x = (int) ((tree.x() + GamePanel.Padding + 7) * GamePanel.scale);
-            int y = (int) ((tree.y() + 16) * GamePanel.scale);
-            int nx = (int) ((neighbours.Down.x() + 7 + GamePanel.Padding) * GamePanel.scale);
-            int ny = (int) (neighbours.Down.y() * GamePanel.scale);
-
-            g.drawLine(x, y, nx, ny);
-            g.drawLine(nx, ny, (int) (nx - 3 * GamePanel.scale), (int) (ny - 3 * GamePanel.scale));
-            g.drawLine(nx, ny, (int) (nx + 3 * GamePanel.scale), (int) (ny - 3 * GamePanel.scale));
-
-        }
-        if (neighbours.Left != null) {
-            g.setColor(Color.GREEN);
-
-            int x = (int) ((tree.x() + GamePanel.Padding) * GamePanel.scale);
-            int y = (int) ((tree.y() + 7) * GamePanel.scale);
-            int nx = (int) (((neighbours.Left.x() + 16) + GamePanel.Padding) * GamePanel.scale);
-            int ny = (int) ((neighbours.Left.y() + 7) * GamePanel.scale);
-
-            g.drawLine(x, y, nx, ny);
-            g.drawLine(nx, ny, (int) (nx + 3 * GamePanel.scale), (int) (ny - 3 * GamePanel.scale));
-            g.drawLine(nx, ny, (int) (nx + 3 * GamePanel.scale), (int) (ny + 3 * GamePanel.scale));
-        }
-        if (neighbours.Right != null) {
-            g.setColor(Color.WHITE);
-
-            int x = (int) (((tree.x() + 16) + GamePanel.Padding) * GamePanel.scale);
-            int y = (int) ((tree.y() + 7) * GamePanel.scale);
-            int nx = (int) ((neighbours.Right.x() + GamePanel.Padding) * GamePanel.scale);
-            int ny = (int) ((neighbours.Right.y() + 7) * GamePanel.scale);
-
-            g.drawLine(x, y, nx, ny);
-            g.drawLine(nx, ny, (int) (nx - 3 * GamePanel.scale), (int) (ny - 3 * GamePanel.scale));
-            g.drawLine(nx, ny, (int) (nx - 3 * GamePanel.scale), (int) (ny + 3 * GamePanel.scale));
-
-        }
-        drawDebugTree(g, neighbours.Up);
-        drawDebugTree(g, neighbours.Down);
-        drawDebugTree(g, neighbours.Left);
-        drawDebugTree(g, neighbours.Right);
     }
 }
 

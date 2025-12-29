@@ -8,8 +8,8 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 
 public class TitleScene implements Scene {
-    private GamePanel gp;
-    private PlayingScene playingScene;
+    private final GamePanel gp;
+    private final PlayingScene playingScene;
 
     private BufferedImage FrameBuffer = new BufferedImage(GamePanel.screenwidth,GamePanel.screenheight,BufferedImage.TYPE_INT_ARGB);
     private Graphics2D fbg = FrameBuffer.createGraphics();
@@ -45,16 +45,13 @@ public class TitleScene implements Scene {
         playingScene.drawWithoutUI(fbg);
         postProcessedFrameBuffer = blur(FrameBuffer);
 
-        if (playingScene != null) playingScene.ScoreFont = playingScene.ScoreFont.deriveFont((float) (8 * GamePanel.scale));
+        playingScene.ScoreFont = playingScene.ScoreFont.deriveFont((float) (8 * GamePanel.scale));
     }
 
     @Override
     public void update(float dt) {
         if (gp.kHandler.somethingPressed) {
-            if (playingScene != null) {
-                gp.changeScene(playingScene);
-            }
-            else gp.changeScene(PlayingScene.class);
+            gp.changeScene(playingScene);
         }
     }
 

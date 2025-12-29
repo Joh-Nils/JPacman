@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JPacman:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JPacman_jar</output-path>
+    <root id="archive" name="JPacman.jar">
+      <element id="module-output" name="JPacman" />
+    </root>
+  </artifact>
+</component>

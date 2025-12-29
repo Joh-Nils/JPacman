@@ -6,14 +6,11 @@ import Entities.Pacman;
 import Handlers.KeyHandler;
 import Handlers.ResizeHandler;
 import Handlers.WindowHandler;
-import Scenes.PlayingScene;
 import Scenes.Scene;
-import Scenes.TitleScene;
-import util.SpriteSheet;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -91,7 +88,11 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        gf = new GameFrame(this);
+        try {
+            gf = new GameFrame(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         start();
     }
 

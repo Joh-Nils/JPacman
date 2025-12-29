@@ -7,8 +7,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class ResizeHandler extends ComponentAdapter {
-    private GamePanel gp;
-    private Dimension lastSize;
+    private final GamePanel gp;
+    private final Dimension lastSize;
 
     public ResizeHandler(GamePanel gp) {
         this.gp = gp;

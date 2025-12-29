@@ -5,8 +5,8 @@ import main.GamePanel;
 import java.awt.*;
 
 public class GameOverScene implements Scene {
-    private GamePanel gp;
-    private PlayingScene playingScene;
+    private final GamePanel gp;
+    private final PlayingScene playingScene;
 
     public GameOverScene(GamePanel gp, PlayingScene playingScene) {
         this.gp = gp;

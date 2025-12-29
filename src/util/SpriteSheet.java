@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SpriteSheet {
@@ -14,7 +13,7 @@ public class SpriteSheet {
 
     private BufferedImage[] sprites;
 
-    private HashMap<SpriteSheet, SpriteSheet> masks = new HashMap<>();
+    private final HashMap<SpriteSheet, SpriteSheet> masks = new HashMap<>();
 
     private final int SpriteWidth;
     private final int SpriteHeight;

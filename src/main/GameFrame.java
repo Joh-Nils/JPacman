@@ -1,21 +1,24 @@
 package main;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import static util.getURL.getURL;
 
 public class GameFrame extends JFrame {
     GamePanel gp;
 
-    public GameFrame(GamePanel gp) {
+    public GameFrame(GamePanel gp) throws IOException {
         Toolkit.getDefaultToolkit().setDynamicLayout(false);
 
         setLayout(null);
-        setTitle("Kindomfight");
+        setTitle("JPacman --made by JohNils");
         requestFocus();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true);
-        //addKeyListener(new KeyHandler());
-        //addMouseListener(new MouseHandler());
 
 
         gp.setPreferredSize(new Dimension(GamePanel.screenwidth, GamePanel.screenheight));
@@ -29,24 +32,18 @@ public class GameFrame extends JFrame {
         setLocationRelativeTo(null);
 
         addKeyListener(gp.kHandler);
-
-        //addMouseListener(gp.mouseHandler);
-        //addMouseMotionListener(gp.mouseHandler);
-        //addMouseWheelListener(gp.mouseHandler);
-
         addWindowListener(gp.wHandler);
         addComponentListener(gp.rHandler);
 
         this.gp = gp;
 
-        //setIcon();
-
+        setIcon();
 
         setVisible(true);
     }
 
-    public void setIcon() {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Bilder/ICO.png"));
-        setIconImage(icon.getImage());
+    public void setIcon() throws IOException {
+        BufferedImage icon = ImageIO.read(getURL("/images/PacMan.png"));
+        setIconImage(icon.getSubimage(64,0,16,16));
     }
 }

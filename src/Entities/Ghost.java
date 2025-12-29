@@ -4,7 +4,6 @@ import Scenes.PlayingScene;
 import main.GamePanel;
 import main.Path;
 import util.AssetPool;
-import util.ImageTransform;
 import util.SpriteSheet;
 
 import java.awt.*;
@@ -32,6 +31,8 @@ public class Ghost extends Entity{
 
     private double scatterSpeed;
     private double frightenedSpeed;
+
+    private Point lastMovePoint = new Point(0,0);
 
     private double frightened = 0.0;
     private double frightenedHighlight = 0.0;
@@ -191,7 +192,7 @@ public class Ghost extends Entity{
                     returnHome = false;
                 }
                 else {
-                    newDirection = gp.astar.getDirection((int) x, (int) y, scene.GhostRedStart.x, scene.GhostRedStart.y, ' ');
+                    newDirection = gp.astar.getDirection((int) x, (int) y, scene.GhostRedStart.x, scene.GhostRedStart.y, flip(direction));
                 }
             }
         }
@@ -322,7 +323,8 @@ public class Ghost extends Entity{
             }
         }
 
-        if (newDirection != direction && flip(newDirection) != direction) {
+        if (newDirection != direction && flip(newDirection) != direction &&
+                !(lastMovePoint.x == (int) x && lastMovePoint.y == (int) y) && newDirection != ' ') {
             direction = newDirection;
 
             if (gp.currentScene instanceof PlayingScene playingScene) {
@@ -334,6 +336,9 @@ public class Ghost extends Entity{
                         x = path.x();
                     }
                 }
+
+                lastMovePoint.x = (int) x;
+                lastMovePoint.y = (int) y;
             }
         }
 
@@ -442,9 +447,9 @@ public class Ghost extends Entity{
     private void move(float dt) {
         double currentSpeed = speed;
 
-        if (frightened > 0) currentSpeed = frightenedSpeed;
+        if (returnHome) currentSpeed = 2 * speed;
+        else if (frightened > 0) currentSpeed = frightenedSpeed;
         else if (scatter) currentSpeed = scatterSpeed;
-        else if (returnHome) currentSpeed = 2 * speed;
 
         switch (direction) {
             case 'U' -> {
